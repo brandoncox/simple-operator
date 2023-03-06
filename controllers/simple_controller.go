@@ -19,9 +19,11 @@ package controllers
 import (
 	"context"
 
+	appsv1 "k8s.io/api/apps/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/controller"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
 	simplev1alpha1 "github.com/brandoncox/simple-operator/api/v1alpha1"
@@ -36,6 +38,9 @@ type SimpleReconciler struct {
 //+kubebuilder:rbac:groups=simple.demo.com,resources=simples,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=simple.demo.com,resources=simples/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=simple.demo.com,resources=simples/finalizers,verbs=update
+//+kubebuilder:rbac:groups=core,resources=events,verbs=create;patch
+//+kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=core,resources=pods,verbs=get;list;watch
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
@@ -49,14 +54,17 @@ type SimpleReconciler struct {
 func (r *SimpleReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	_ = log.FromContext(ctx)
 
-	// TODO(user): your logic here
+	simple := &simplev1alpha1.Simple{}
+	err := r.Get(ctx, req.NamespacedName, simple)
 
-	return ctrl.Result{}, nil
+	return ctrl.Result{}, err
 }
 
 // SetupWithManager sets up the controller with the Manager.
 func (r *SimpleReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&simplev1alpha1.Simple{}).
+		Owns(&appsv1.Deployment{}).
+		WithOptions(controller.Options{MaxConcurrentReconciles: 2}).
 		Complete(r)
 }
