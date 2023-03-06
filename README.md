@@ -1,5 +1,5 @@
 # simple
-// TODO(user): Add simple overview of use/purpose
+Simple prototype of a Go operator using the operator SDK
 
 ## Description
 // TODO(user): An in-depth paragraph about your project and overview of use
@@ -40,9 +40,6 @@ UnDeploy the controller to the cluster:
 ```sh
 make undeploy
 ```
-
-## Contributing
-// TODO(user): Add detailed information on how you would like others to contribute to this project
 
 ### How it works
 This project aims to follow the Kubernetes [Operator pattern](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/)
