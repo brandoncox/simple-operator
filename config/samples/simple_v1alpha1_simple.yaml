@@ -9,4 +9,4 @@ metadata:
     app.kubernetes.io/created-by: simple
   name: simple-sample
 spec:
-  # TODO(user): Add fields here
+  simpleMessage: hello world

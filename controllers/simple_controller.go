@@ -18,6 +18,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 
 	appsv1 "k8s.io/api/apps/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -55,6 +56,7 @@ func (r *SimpleReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 	_ = log.FromContext(ctx)
 
 	simple := &simplev1alpha1.Simple{}
+	fmt.Printf("the message in the crd %q", simple.Spec.SimpleMessage)
 	err := r.Get(ctx, req.NamespacedName, simple)
 
 	return ctrl.Result{}, err
